@@ -1,1 +1,174 @@
 "Copy and paste into here"
+
+create database final_project;
+
+use  final_project;
+
+CREATE TABLE Banks(
+     BankID int PRIMARY KEY,
+     BankName VARCHAR(50),
+     FOREIGN KEY (BankName) REFERENCES Bank_Accounts(BankName)
+);
+
+CREATE TABLE Website (
+	BankID int,
+    CustomerID int,
+    AccountID int,    
+    FOREIGN KEY (BankID) REFERENCES Banks(BankID),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (AccountID) REFERENCES Login(AccountID)
+);
+
+CREATE TABLE Login(
+	AccountID int PRIMARY KEY,
+    LoginTime TIME,
+    Password VARCHAR(10)
+);
+
+ALTER TABLE Bank_Accounts ADD BankBalance INT;
+
+CREATE TABLE Customers(
+	CustomerID int PRIMARY KEY,
+    CustomerName VARCHAR(50),
+    SSN INT,
+    Address VARCHAR(50),
+    State VARCHAR(5),
+    ZipCode VARCHAR(7)
+);
+
+ALTER TABLE Customers ADD COLUMN (AccountID INT, FOREIGN KEY (AccountID) REFERENCES Login(AccountID));
+
+CREATE TABLE Transactions(
+	TransactionID VARCHAR(10) PRIMARY KEY,
+    TransactionName VARCHAR(50),
+    Amount INT 
+);
+
+CREATE TABLE Bank_Accounts(
+	BankName VARCHAR(50) PRIMARY KEY,
+    CustomerID INT,
+    TransactionID VARCHAR(10),
+    FOREIGN KEY (TransactionID) REFERENCES Transactions(TransactionID),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+ALTER TABLE Bank_Accounts ADD BankBalance INT;
+
+/*inserting into customers table*/
+INSERT INTO Customers(CustomerID, CustomerName, SSN, Address, State, ZipCode, AccountID)
+VALUES ('1', 'Ekta Halani', '22233', '497 Singley Dr', 'CA', '95035', '1');
+INSERT INTO Customers(CustomerID, CustomerName, SSN, Address, State, ZipCode, AccountID)
+VALUES ('2', 'John Snow', '33322', '887 Whingley Dr', 'CA', '95035', '2');
+INSERT INTO Customers(CustomerID, CustomerName, SSN, Address, State, ZipCode, AccountID)
+VALUES ('3', 'Jenny Wu', '45645', '656 Thomas Dr', 'CA', '95035', '3');
+
+/*inserting into login table*/
+INSERT INTO Login(AccountID, LoginTime, Password)
+VALUES ('1', '10:30:00', '1234');
+INSERT INTO Login(AccountID, LoginTime, Password)
+VALUES ('2', '11:11:00', 'abcd');
+INSERT INTO Login(AccountID, LoginTime, Password)
+VALUES ('3', '02:30:00', 'fghi');
+
+/*inserting into transactions table*/
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('565656', 'Shopping', '500');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('272727', 'Chipotle', '20');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('343434', 'Ice cream', '30');
+
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('555999', 'Groceries', '400');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('888994', 'Paradise Spa', '660');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('676767', 'Auto Repair', '300');
+
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('121212', 'Jamba Juice', '400');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('141414', 'Amazon', '660');
+INSERT INTO Transactions(TransactionID, TransactionName, Amount)
+VALUES ('969696', 'Electricity Bill', '30');
+
+/*inserting into bank accounts table*/
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Chase Bank', '1', '565656', '8000');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Bank of America', '1', '272727', '600');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Wells Fargo', '1', '343434', '750');
+
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Fremont Bank', '2', '555999', '906');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Citi Bank', '2', '888994', '7000');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Golden Bank', '2', '676767', '450');
+
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Silver Bank', '3', '121212', '5000');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('Truist Bank', '3', '141414', '6700');
+INSERT INTO Bank_Accounts(BankName, CustomerID, TransactionID, BankBalance)
+VALUES ('PNC Bank', '3', '969696', '5600');
+
+/*inserting into Banks table*/
+INSERT INTO Banks(BankID, BankName)
+VALUES ('1', 'Chase Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('2', 'Bank of America');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('3', 'Wells Fargo');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('4', 'Fremont Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('5', 'Citi Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('6', 'Golden Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('7', 'Silver Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('8', 'Truist Bank');
+INSERT INTO Banks(BankID, BankName)
+VALUES ('9', 'PNC Bank');
+
+
+
+/*inserting into Website table*/
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('1', '1', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('2', '1', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('3', '1', '1');
+
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('4', '2', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('5', '2', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('6', '2', '1');
+
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('7', '3', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('8', '3', '1');
+INSERT INTO Website(BankID, CustomerID, AccountID)
+VALUES ('9', '3', '1');
+
+/* creating the views*/
+/*customer view */
+CREATE VIEW CustomerView AS SELECT CustomerID, CustomerName, SSN, AccountID FROM Customers;
+SELECT * FROM CustomerView;
+
+/*bank view */
+CREATE VIEW BankView AS SELECT Banks.BankID, Banks.BankName, Bank_Accounts.BankBalance FROM Banks JOIN Bank_Accounts ON Banks.BankName = Bank_Accounts.BankName;
+SELECT * FROM BankView;
+
+/*government view */
+CREATE VIEW GovermentView AS SELECT Login.AccountID, Customers.CustomerName, Login.LoginTime FROM Login JOIN Customers ON Login.AccountID = Customers.AccountID;
+SELECT * FROM GovermentView;
+
+
