@@ -1,0 +1,235 @@
+DROP TABLE Customers;
+DROP TABLE Login_Times;
+DROP TABLE Login;
+DROP TABLE Website;
+DROP TABLE Banks;
+DROP TABLE Bank_Accounts;
+DROP TABLE Transactions;
+DROP VIEW Bank_Views;
+DROP VIEW Customer_View;
+DROP VIEW Government_View;
+
+create database final_project;
+
+use  final_project;
+
+CREATE TABLE Banks(
+     Bank_ID INT NOT NULL,
+     Bank_Name VARCHAR(50) NOT NULL,
+	 PRIMARY KEY(Bank_ID)
+);
+
+CREATE TABLE Website(
+	WEBSITE_ID INT AUTO_INCREMENT PRIMARY KEY,
+	Bank_ID INT NOT_NULL,
+    Customer_ID INT NOT_NULL,
+    Account_ID INT NOT_NULL,    
+    FOREIGN KEY (Bank_ID) REFERENCES Banks(Bank_ID),
+    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+	FOREIGN KEY (Account_ID) REFERENCES Login(Account_ID)
+);
+
+CREATE TABLE Login(
+	Account_ID INT PRIMARY KEY,
+    Password VARCHAR(10)
+);
+
+CREATE TABLE Login_Times(
+	Account_ID INT,
+	Login_Date TEXT,
+	Login_Time TEXT,
+	FOREIGN KEY (Account_ID) REFERENCES Login(Account_ID) 
+);
+
+CREATE TABLE Customers(
+	Customer_ID INT PRIMARY KEY,
+    Customer_Name VARCHAR(50),
+    SSN INT,
+    Address VARCHAR(50),
+    State VARCHAR(5),
+    Zipcode VARCHAR(7)
+);
+
+CREATE TABLE Transactions(
+	Transaction_ID VARCHAR(10) PRIMARY KEY,
+    Transaction_Name VARCHAR(50),
+	Transaction_Date TEXT,
+	Transaction_Time TEXT,
+    Amount INT 
+);
+
+CREATE TABLE Bank_Accounts(
+	Bank_ID INT NOT NULL,
+    Customer_ID INT NOT NULL,
+    Transaction_ID VARCHAR(10),
+    FOREIGN KEY (Transaction_ID) REFERENCES Transactions(Transaction_ID),
+    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+	PRIMARY KEY (Bank_ID, Customer_ID)
+);
+
+ALTER TABLE Bank_Accounts ADD Bank_Balance INT;
+
+/*inserting into customers table*/
+INSERT INTO Customers(Customer_ID, Customer_Name, SSN, Address, State, Zipcode)
+VALUES ('1', 'Ekta Halani', '22233', '497 Singley Dr', 'CA', '95035');
+INSERT INTO Customers(Customer_ID, Customer_Name, SSN, Address, State, Zipcode)
+VALUES ('2', 'John Snow', '33322', '887 Whingley Dr', 'CA', '95035');
+INSERT INTO Customers(Customer_ID, Customer_Name, SSN, Address, State, Zipcode)
+VALUES ('3', 'Jenny Wu', '45645', '656 Thomas Dr', 'CA', '95035');
+
+/*inserting into transactions table*/
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('565656', 'Shopping', date(datetime()), time(datetime()), '500');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('272727', 'Chipotle', date(datetime()), time(datetime()),'20');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('343434', 'Ice cream', date(datetime()), time(datetime()),'30');
+
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('555999', 'Groceries', date(datetime()), time(datetime()),'400');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('888994', 'Paradise Spa', date(datetime()), time(datetime()),'660');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('676767', 'Auto Repair', date(datetime()), time(datetime()),'300');
+
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('121212', 'Jamba Juice', date(datetime()), time(datetime()),'400');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('141414', 'Amazon', date(datetime()), time(datetime()),'660');
+INSERT INTO Transactions(Transaction_ID, Transaction_Name, Transaction_Date, Transaction_Time, Amount)
+VALUES ('969696', 'Electricity Bill', date(datetime()), time(datetime()),'30');
+
+/*inserting into bank accounts table*/
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('1', '1', '565656', '8000');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('2', '1', '272727', '600');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('3', '1', '343434', '750');
+
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('4', '2', '555999', '906');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('5', '2', '888994', '7000');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('6', '2', '676767', '450');
+
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('7', '3', '121212', '5000');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('8', '3', '141414', '6700');
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('9', '3', '969696', '5600');
+
+INSERT INTO Bank_Accounts(Bank_ID, Customer_ID, Transaction_ID, Bank_Balance)
+VALUES ('1', '2', '121212', '3000');
+
+/*inserting into Banks table*/
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('1', 'Chase Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('2', 'Bank of America');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('3', 'Wells Fargo');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('4', 'Fremont Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('5', 'Citi Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('6', 'Golden Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('7', 'Silver Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('8', 'Truist Bank');
+INSERT INTO Banks(Bank_ID, Bank_Name)
+VALUES ('9', 'PNC Bank');
+
+/*inserting into login table*/
+/*User Creating Account*/
+INSERT INTO Login(Account_ID, Password)
+VALUES ('1', '1234');
+INSERT INTO Login(Account_ID, Password)
+VALUES ('2', 'abcd');
+INSERT INTO Login(Account_ID, Password)
+VALUES ('3', 'fghi');
+
+/*inserting into login times table*/
+INSERT INTO Login_Times(Account_ID, Login_Date, Login_Time)
+VALUES ('1', date(datetime()),time(datetime()));
+INSERT INTO Login_Times(Account_ID, Login_Date, Login_Time)
+VALUES ('2', date(datetime()),time(datetime()));
+INSERT INTO Login_Times(Account_ID, Login_Date, Login_Time)
+VALUES ('3', date(datetime()),time(datetime()));
+
+/*inserting into Website table*/
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('1', '1', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('2', '1', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('3', '1', '1');
+
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('4', '2', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('5', '2', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('6', '2', '1');
+
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('7', '3', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('8', '3', '1');
+INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
+VALUES ('9', '3', '1');
+
+/* creating the views*/
+/*customer view */
+CREATE VIEW Customer_View 
+AS SELECT 
+		Customers.Customer_ID, 
+		Customers.Customer_Name, 
+		Banks.Bank_Name AS Bank,
+		Bank_Accounts.Bank_Balance AS Balance
+		FROM Bank_Accounts
+		JOIN Banks ON Banks.Bank_ID = Bank_Accounts.Bank_ID
+		JOIN Customers ON Bank_Accounts.Customer_ID = Customers.Customer_ID;
+SELECT * FROM Customer_View;
+
+CREATE VIEW Bank_Views 
+AS SELECT  
+		Banks.Bank_Name, 
+		SUM(Bank_Accounts.Bank_Balance)
+		FROM Banks 
+		JOIN Bank_Accounts ON Bank_Accounts.Bank_ID = Banks.Bank_ID
+		GROUP BY Bank_Accounts.Bank_ID;
+SELECT * 
+FROM Bank_Views;
+
+/*transactions view for the FIRST customer*/
+CREATE VIEW Transaction_View
+AS SELECT	
+		Customers.Customer_ID,
+		Customers.Customer_Name,
+		Transactions.Transaction_Name,
+		Transactions.Transaction_Date,
+		Transactions.Transaction_Time,
+		Transactions.Amount
+		FROM Bank_Accounts
+		JOIN Transactions ON Bank_Accounts.Transaction_ID = Transactions.Transaction_ID		
+		JOIN Customers ON Customers.Customer_ID = Bank_Accounts.Customer_ID WHERE Customers.Customer_ID = 1
+		GROUP BY Transactions.Transaction_ID;
+SELECT * 
+FROM Transaction_View
+
+DROP VIEW Transaction_View
+
+/*government view */
+CREATE VIEW Government_View 
+AS SELECT 
+		Login.Account_ID, 
+		Customers.Customer_Name, 
+		Login_Times.Login_Time 
+		FROM Login, Login_Times, Customers;
+SELECT * FROM Government_View;
+
