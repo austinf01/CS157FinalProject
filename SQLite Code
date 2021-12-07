@@ -170,18 +170,18 @@ INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
 VALUES ('3', '1', '1');
 
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('4', '2', '1');
+VALUES ('4', '2', '2');
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('5', '2', '1');
+VALUES ('5', '2', '2');
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('6', '2', '1');
+VALUES ('6', '2', '2');
 
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('7', '3', '1');
+VALUES ('7', '3', '3');
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('8', '3', '1');
+VALUES ('8', '3', '3');
 INSERT INTO Website(Bank_ID, Customer_ID, Account_ID)
-VALUES ('9', '3', '1');
+VALUES ('9', '3', '3');
 
 /* creating the views*/
 /*customer view */
@@ -193,13 +193,15 @@ AS SELECT
 		Bank_Accounts.Bank_Balance AS Balance
 		FROM Bank_Accounts
 		JOIN Banks ON Banks.Bank_ID = Bank_Accounts.Bank_ID
-		JOIN Customers ON Bank_Accounts.Customer_ID = Customers.Customer_ID;
-SELECT * FROM Customer_View;
+		JOIN Customers ON Bank_Accounts.Customer_ID = Customers.Customer_ID
+		ORDER BY Customers.Customer_ID;
+SELECT * 
+FROM Customer_View;
 
 CREATE VIEW Bank_Views 
 AS SELECT  
 		Banks.Bank_Name, 
-		SUM(Bank_Accounts.Bank_Balance)
+		SUM(Bank_Accounts.Bank_Balance) AS 'Total Balance'
 		FROM Banks 
 		JOIN Bank_Accounts ON Bank_Accounts.Bank_ID = Banks.Bank_ID
 		GROUP BY Bank_Accounts.Bank_ID;
@@ -217,19 +219,20 @@ AS SELECT
 		Transactions.Amount
 		FROM Bank_Accounts
 		JOIN Transactions ON Bank_Accounts.Transaction_ID = Transactions.Transaction_ID		
-		JOIN Customers ON Customers.Customer_ID = Bank_Accounts.Customer_ID WHERE Customers.Customer_ID = 1
-		GROUP BY Transactions.Transaction_ID;
+		JOIN Customers ON Customers.Customer_ID = Bank_Accounts.Customer_ID WHERE Customers.Customer_ID = 1;		
 SELECT * 
-FROM Transaction_View
-
-DROP VIEW Transaction_View
+FROM Transaction_View;
 
 /*government view */
 CREATE VIEW Government_View 
-AS SELECT 
+AS SELECT DISTINCT
 		Login.Account_ID, 
-		Customers.Customer_Name, 
+		Customers.Customer_Name,
+		Login_Times.Login_Date,
 		Login_Times.Login_Time 
-		FROM Login, Login_Times, Customers;
-SELECT * FROM Government_View;
+		FROM Login, Customers
+		JOIN Login_Times ON Login_Times.Account_ID = Login.Account_ID 
+		JOIN Website ON Website.Customer_ID = Customers.Customer_ID AND Website.Account_ID = Login.Account_ID;
+SELECT * 
+FROM Government_View;
 
